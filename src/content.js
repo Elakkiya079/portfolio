@@ -3,7 +3,7 @@ export const resumeFile = {
   filename: 'Elakkiya_E_Resume.pdf',
 }
 
-export const portfolioUrl = 'http://localhost:5173'
+export const portfolioUrl = "https://portfolio-teal-six-55.vercel.app/";
 
 export const profile = {
   name: 'Elakkiya E',
