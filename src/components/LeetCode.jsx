@@ -1,8 +1,53 @@
+import { useEffect, useState } from 'react'
 import { leetcode } from '../content.js'
 import { IconArrow } from './Icons.jsx'
 
+const emptyBreakdown = [
+  { label: 'Easy', count: null },
+  { label: 'Medium', count: null },
+  { label: 'Hard', count: null },
+]
+
 export default function LeetCode() {
-  const max = Math.max(...leetcode.breakdown.map((item) => item.count), 1)
+  const [stats, setStats] = useState({
+    solved: null,
+    breakdown: emptyBreakdown,
+    status: 'loading',
+  })
+
+  useEffect(() => {
+    const controller = new AbortController()
+
+    fetch(`/api/leetcode?t=${Date.now()}`, {
+      cache: 'no-store',
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error('Unable to load LeetCode stats')
+        return response.json()
+      })
+      .then((data) => {
+        if (typeof data.solved !== 'number' || !Array.isArray(data.breakdown)) {
+          throw new Error('LeetCode stats were incomplete')
+        }
+        setStats({
+          solved: data.solved,
+          breakdown: data.breakdown,
+          status: 'ready',
+        })
+      })
+      .catch((error) => {
+        if (error.name === 'AbortError') return
+        setStats((current) => ({ ...current, status: 'error' }))
+      })
+
+    return () => controller.abort()
+  }, [])
+
+  const counts = stats.breakdown
+    .map((item) => item.count)
+    .filter((count) => typeof count === 'number')
+  const max = Math.max(...counts, 1)
 
   return (
     <section className="section" id="leetcode">
@@ -13,27 +58,36 @@ export default function LeetCode() {
             <h2>Practice in public.</h2>
             <p className="panel-copy">
               Algorithm practice on the profile <strong>{leetcode.username}</strong>.
-              The counts below are from the public profile, and the link opens the live page.
+              These counts load from the public profile each time this page opens.
             </p>
             <a className="btn btn-sand" href={leetcode.href} target="_blank" rel="noreferrer">
               View LeetCode profile
               <IconArrow />
             </a>
           </div>
-          <div className="leetcode-stats">
+          <div className="leetcode-stats" aria-busy={stats.status === 'loading'}>
             <p className="solved">
-              <span>{leetcode.solved}</span>
+              <span>{stats.status === 'ready' ? stats.solved : '…'}</span>
               problems solved
             </p>
+            {stats.status === 'error' ? (
+              <p className="stat-status">
+                Current stats could not be loaded. The profile link opens the live page.
+              </p>
+            ) : null}
             <ul>
-              {leetcode.breakdown.map((item) => (
+              {stats.breakdown.map((item) => (
                 <li key={item.label}>
                   <div className="stat-label">
                     <span>{item.label}</span>
-                    <strong>{item.count}</strong>
+                    <strong>{item.count ?? '…'}</strong>
                   </div>
                   <div className="bar" aria-hidden="true">
-                    <span style={{ width: `${(item.count / max) * 100}%` }} />
+                    <span
+                      style={{
+                        width: item.count == null ? '0%' : `${(item.count / max) * 100}%`,
+                      }}
+                    />
                   </div>
                 </li>
               ))}

@@ -148,12 +148,6 @@ export const skillGroups = [
 export const leetcode = {
   username: 'Elakkiya_Raja',
   href: 'https://leetcode.com/u/Elakkiya_Raja/',
-  solved: 37,
-  breakdown: [
-    { label: 'Easy', count: 23 },
-    { label: 'Medium', count: 14 },
-    { label: 'Hard', count: 0 },
-  ],
 }
 
 export const education = [

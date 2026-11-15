@@ -646,6 +646,12 @@ a {
   color: #8eb0ff;
 }
 
+.stat-status {
+  margin: 12px 0 0;
+  color: #c5cad6;
+  font-size: 0.92rem;
+}
+
 .leetcode-stats ul {
   list-style: none;
   padding: 0;
