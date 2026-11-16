@@ -32,6 +32,10 @@ export const profile = {
       label: 'LeetCode',
       href: 'https://leetcode.com/u/Elakkiya_Raja/',
     },
+    {
+      label: 'HackerRank',
+      href: 'https://www.hackerrank.com/profile/elakkiya079',
+    },
   ],
 }
 
@@ -41,6 +45,7 @@ export const navLinks = [
   { id: 'personal', label: 'Personal' },
   { id: 'skills', label: 'Skills' },
   { id: 'leetcode', label: 'LeetCode' },
+  { id: 'hackerrank', label: 'HackerRank' },
   { id: 'education', label: 'Education' },
 ]
 
@@ -148,6 +153,11 @@ export const skillGroups = [
 export const leetcode = {
   username: 'Elakkiya_Raja',
   href: 'https://leetcode.com/u/Elakkiya_Raja/',
+}
+
+export const hackerrank = {
+  username: 'elakkiya079',
+  href: 'https://www.hackerrank.com/profile/elakkiya079',
 }
 
 export const education = [

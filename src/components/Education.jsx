@@ -6,7 +6,7 @@ export default function Education() {
     <section className="section" id="education">
       <div className="shell">
         <div className="section-head">
-          <p>06 — Education</p>
+          <p>07 — Education</p>
           <h2>Study, certifications, and mentoring.</h2>
         </div>
         <div className="edu-layout">

@@ -1,11 +1,24 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
+import { getHackerRankBadges } from './server/hackerrankBadges.js'
 import { getLeetCodeStats } from './server/leetcodeStats.js'
 
-function leetcodeDevApi() {
+const devRoutes = {
+  '/api/leetcode': {
+    load: getLeetCodeStats,
+    error: 'Unable to load LeetCode stats',
+  },
+  '/api/hackerrank': {
+    load: getHackerRankBadges,
+    error: 'Unable to load HackerRank badges',
+  },
+}
+
+function portfolioDevApi() {
   const handle = async (req, res, next) => {
     const path = req.url?.split('?')[0]
-    if (path !== '/api/leetcode') {
+    const route = devRoutes[path]
+    if (!route) {
       next()
       return
     }
@@ -14,17 +27,17 @@ function leetcodeDevApi() {
     res.setHeader('Cache-Control', 'no-store')
 
     try {
-      const stats = await getLeetCodeStats()
+      const payload = await route.load()
       res.statusCode = 200
-      res.end(JSON.stringify(stats))
+      res.end(JSON.stringify(payload))
     } catch {
       res.statusCode = 502
-      res.end(JSON.stringify({ error: 'Unable to load LeetCode stats' }))
+      res.end(JSON.stringify({ error: route.error }))
     }
   }
 
   return {
-    name: 'leetcode-dev-api',
+    name: 'portfolio-dev-api',
     configureServer(server) {
       server.middlewares.use(handle)
     },
@@ -36,5 +49,5 @@ function leetcodeDevApi() {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), leetcodeDevApi()],
+  plugins: [react(), portfolioDevApi()],
 })

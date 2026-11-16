@@ -681,6 +681,12 @@ a {
   background: #8eb0ff;
 }
 
+.badge-meta {
+  margin-top: 6px;
+  color: #c5cad6;
+  font-size: 0.82rem;
+}
+
 .edu-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
